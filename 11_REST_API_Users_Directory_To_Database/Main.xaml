@@ -1,0 +1,28 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:njl="clr-namespace:Newtonsoft.Json.Linq;assembly=Newtonsoft.Json" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uda="clr-namespace:UiPath.Database.Activities;assembly=UiPath.Database.Activities" xmlns:uwd="clr-namespace:UiPath.Web.Activities;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Sequence DisplayName="Main Sequence - Users Directory API to SQL Server" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="str_JsonResponse" />
+      <Variable x:TypeArguments="x:Int32" Name="int_StatusCode" />
+      <Variable x:TypeArguments="njl:JArray" Name="jsonArr_Users" />
+      <Variable x:TypeArguments="ui:DatabaseConnection" Name="dbConn" />
+    </Sequence.Variables>
+    <ui:HttpClient Body="{x:Null}" ClientCertificate="{x:Null}" ClientCertificatePassword="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" FileAttachments="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" Password="{x:Null}" ResourcePath="{x:Null}" ResponseAttachment="{x:Null}" ResponseHeaders="{x:Null}" SecureClientCertificatePassword="{x:Null}" SecurePassword="{x:Null}" Username="{x:Null}" AcceptFormat="JSON" AuthenticationType="None" BodyFormat="application/xml" DisplayName="HTTP Request - Users API" EnableSSLVerification="True" EndPoint="https://jsonplaceholder.typicode.com/users" Method="GET" Result="[str_JsonResponse]" StatusCode="[int_StatusCode]" TimeoutMS="15000" />
+    <ui:DeserializeJsonArray DisplayName="Deserialize JSON Array" JsonArray="[jsonArr_Users]" JsonString="[str_JsonResponse]" />
+    <ui:DatabaseConnect DisplayName="Connect to database" ProviderName="System.Data.SqlClient" ConnectionString="Server=localhost\SQLEXPRESS;Database=Enterprise_Users_DB;Integrated Security=True;TrustServerCertificate=True" DatabaseConnection="[dbConn]" />
+    <ui:ForEach x:TypeArguments="njl:JToken" CurrentIndex="{x:Null}" DisplayName="For Each User in Array" Values="[jsonArr_Users]">
+      <ui:ForEach.Body>
+        <ActivityAction x:TypeArguments="njl:JToken">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="njl:JToken" Name="user" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Body">
+            <ui:WriteLine DisplayName="Write Line - Output" Text="[&quot;ID: &quot; + user(&quot;id&quot;).ToString + &quot; | Name: &quot; + user(&quot;name&quot;).ToString + &quot; | Email: &quot; + user(&quot;email&quot;).ToString + &quot; | City: &quot; + user(&quot;address&quot;)(&quot;city&quot;).ToString]" />
+            <uda:ExecuteNonQuery AffectedRecords="{x:Null}" ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" ExistingDbConnection="[dbConn]" DisplayName="Execute Non Query - Insert User" Sql="IF NOT EXISTS (SELECT 1 FROM [dbo].[ApiUsers] WHERE [Id] = @Id) BEGIN INSERT INTO [dbo].[ApiUsers] ([Id], [Name], [Username], [Email], [Phone], [Website], [City], [Zipcode], [Company], [InsertedAt]) VALUES (@Id, @Name, @Username, @Email, @Phone, @Website, @City, @Zipcode, @Company, GETDATE()) END" />
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEach.Body>
+    </ui:ForEach>
+    <uda:DatabaseDisconnect DatabaseConnection="[dbConn]" DisplayName="Disconnect from database" />
+    <ui:MessageBox Caption="[&quot;Sync Completed&quot;]" ChosenButton="{x:Null}" DisplayName="Message Box" Text="[&quot;All Users successfully ingested into SQL Server!&quot;]" />
+  </Sequence>
+</Activity>
