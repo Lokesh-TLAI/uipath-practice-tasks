@@ -1,0 +1,56 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Main Sequence - Text Cleaner String Manipulations" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Default="   lokesh kumar - RPA DEVELOPER   " Name="rawText" />
+      <Variable x:TypeArguments="x:String" Name="cleanText" />
+      <Variable x:TypeArguments="x:String" Name="upperText" />
+      <Variable x:TypeArguments="x:String" Name="lowerText" />
+      <Variable x:TypeArguments="x:Int32" Name="charCount" />
+    </Sequence.Variables>
+    <Assign DisplayName="Assign - Trim">
+      <Assign.To><OutArgument x:TypeArguments="x:String">[cleanText]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:String">[rawText.Trim]</InArgument></Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign - ToUpper">
+      <Assign.To><OutArgument x:TypeArguments="x:String">[upperText]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:String">[cleanText.ToUpper]</InArgument></Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign - ToLower">
+      <Assign.To><OutArgument x:TypeArguments="x:String">[lowerText]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:String">[cleanText.ToLower]</InArgument></Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign - Length">
+      <Assign.To><OutArgument x:TypeArguments="x:Int32">[charCount]</OutArgument></Assign.To>
+      <Assign.Value><InArgument x:TypeArguments="x:Int32">[cleanText.Length]</InArgument></Assign.Value>
+    </Assign>
+    <ui:WriteLine DisplayName="Write Line - Report" Text="[&quot;Original: [&quot; + rawText + &quot;]&quot; + vbCrLf + &quot;Cleaned: [&quot; + cleanText + &quot;]&quot; + vbCrLf + &quot;Capital: &quot; + upperText + vbCrLf + &quot;Small: &quot; + lowerText + vbCrLf + &quot;Length: &quot; + charCount.ToString]" />
+    <ui:MessageBox Caption="[&quot;String Sanitization&quot;]" ChosenButton="{x:Null}" DisplayName="Message Box" Text="[&quot;Cleaned: &quot; + cleanText + vbCrLf + &quot;Length: &quot; + charCount.ToString]" />
+  </Sequence>
+</Activity>
