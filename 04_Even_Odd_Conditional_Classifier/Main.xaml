@@ -1,0 +1,62 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Main Sequence - Even Odd Classifier" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="strInput" />
+      <Variable x:TypeArguments="x:Int32" Name="intNum" />
+    </Sequence.Variables>
+    <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Input Dialog - Number" IsPassword="False" Label="Enter any whole number:" Title="Even or Odd Check">
+      <ui:InputDialog.Result>
+        <OutArgument x:TypeArguments="x:String">[strInput]</OutArgument>
+      </ui:InputDialog.Result>
+    </ui:InputDialog>
+    <Assign DisplayName="Assign - Parse Integer">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[intNum]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">[CInt(strInput)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If Condition="[intNum Mod 2 = 0]" DisplayName="If - Check Even or Odd">
+      <If.Then>
+        <Sequence DisplayName="Then - Even Sequence">
+          <ui:WriteLine DisplayName="Write Line - Even" Text="[&quot;Number &quot; + intNum.ToString + &quot; is EVEN.&quot;]" />
+          <ui:MessageBox Caption="[&quot;Parity Result&quot;]" ChosenButton="{x:Null}" DisplayName="Message Box" Text="[&quot;Number &quot; + intNum.ToString + &quot; : Even Number hai!&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Else - Odd Sequence">
+          <ui:WriteLine DisplayName="Write Line - Odd" Text="[&quot;Number &quot; + intNum.ToString + &quot; is ODD.&quot;]" />
+          <ui:MessageBox Caption="[&quot;Parity Result&quot;]" ChosenButton="{x:Null}" DisplayName="Message Box" Text="[&quot;Number &quot; + intNum.ToString + &quot; : Odd Number hai!&quot;]" />
+        </Sequence>
+      </If.Else>
+    </If>
+  </Sequence>
+</Activity>
